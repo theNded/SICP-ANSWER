@@ -1,9 +1,8 @@
 ; recursion version
-(define f-recur
-  (lambda (n)
+(define (f-recur n)
     (if (< n 3)
         n
-        (+ (f-recur (- n 1)) (* 2 (f-recur (- n 2))) (* 3 (f-recur (- n 3)))))))
+        (+ (f-recur (- n 1)) (* 2 (f-recur (- n 2))) (* 3 (f-recur (- n 3))))))
 
 ; iteration version
 (define (f-iter n)

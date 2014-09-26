@@ -1,13 +1,12 @@
+; pascal function, with low efficiency due to the recursion
+(define (pascal i j)
+  (cond ((= i 1) 1)
+        ((= j 1) 1)
+        ((= j i) 1)
+        (else (+ (pascal (- i 1) (- j 1)) (pascal (- i 1) j)))))
+
 ; print-pascal as the global function
 (define (print-pascal n)
-
-  ; pascal function, no list optimize
-  (define (pascal i j)
-    (cond ((= i 1) 1)
-          ((= j 1) 1)
-          ((= j i) 1)
-          (else (+ (pascal (- i 1) (- j 1)) (pascal (- i 1) j)))))
-
   ; print by line
   (define (iter-line i j n)
     (cond ((> i n)
