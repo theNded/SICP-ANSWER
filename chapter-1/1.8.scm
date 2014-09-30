@@ -1,0 +1,11 @@
+(define (curt a)
+  (define threshold 0.0001)
+  (define (accurate? guess a)
+    (< (abs (- (* guess guess guess) a)) threshold))
+  (define (improve guess a )
+    (/ (+ (/ a (square guess)) (* 2 guess)) 3))
+  (define (curt-iter guess a)
+    (if (accurate? guess a)
+        guess
+        (curt-iter (improve guess a) a)))
+    (curt-iter 1.0 a))
