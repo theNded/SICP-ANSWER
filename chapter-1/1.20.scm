@@ -1,0 +1,22 @@
+(define (gcd a b)
+  (define (gcd-iter a b cnt)
+    (if (= b 0)
+        (begin
+         (display cnt)
+         (newline)
+         a)
+        (gcd-iter b (remainder a b) (+ cnt 1))))
+  (gcd-iter a b 0))
+
+(define (gcd-reg a b)
+  (define (new-if predicate if-clause else-clause)
+    (cond (predicate if-clause)
+          (else else-clause)))
+  (define (gcd-iter a b cnt)
+    (new-if (= b 0)
+            (begin
+              (display cnt)
+              (newline)
+              a)
+            (gcd-iter b (remainder a b) (+ cnt 1))))
+  (gcd-iter a b 0))

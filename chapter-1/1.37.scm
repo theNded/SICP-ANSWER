@@ -11,3 +11,16 @@
   ; (cont-frac-recur n d 1 k))
   ; (b)
   (cont-frac-iter n d k 0))
+
+(define (test-cont-frac n d)
+  (define phi (/ (- (sqrt 5) 1) 2))
+  (define (test-cont-frac-iter n d i)
+    (let ((test-val (cont-frac n d i)))
+      (if (< (abs (- test-val phi)) 0.0001)
+          (begin
+            (display test-val)
+            '())
+          (cons (- test-val phi) (test-cont-frac-iter n d (+ i 1))))))
+  (test-cont-frac-iter n d 0))
+;Value 13:
+; (-.6180339887498949 .3819660112501051 -.1180339887498949 .04863267791677173 -1.8033988749894814e-2 6.9660112501050975e-3 -2.6493733652794837e-3 1.0136302977241662e-3 -3.8692992636546464e-4 1.4782943192326314e-4)
