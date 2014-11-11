@@ -1,0 +1,10 @@
+(define (same-parity x . l)
+  (define (same-parity? y)
+    (eq? (even? x) (even? y)))
+
+  (define (cons-same-parity l)
+    (cond ((null? l) '())
+          ((same-parity? (car l))
+           (cons (car l) (cons-same-parity (cdr l))))
+          (else (cons-same-parity (cdr l)))))
+  (cons x (cons-same-parity l)))
