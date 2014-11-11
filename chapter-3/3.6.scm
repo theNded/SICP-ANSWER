@@ -1,0 +1,55 @@
+; A simple psuedo random number generator
+(define (rand-update x)
+  (let ((k (integer-divide x 127773)))
+    (let ((res (- (* (car k) 16807)
+                  (* (cdr k) 2836))))
+      (if (< res 0)
+          (+ res 2147483647)
+          res))))
+
+(define random-init 7)
+
+(define rand
+  (let ((x random-init))
+    (lambda (op)
+      (cond ((eq? op 'generate)
+             (set! x (rand-update x)) x)
+            ((eq? op 'reset)
+             (lambda (seed)
+               (set! x seed) 'reset-done))
+            (else
+             (error "Unknown op -- RAND" op))))))
+
+
+(newline)
+(display (rand 'generate))
+(newline)
+(display (rand 'generate))
+(newline)
+(display '----------)
+
+((rand 'reset) 1100012975)
+(newline)
+(display (rand 'generate))
+(newline)
+(display (rand 'generate))
+(newline)
+(display (rand 'generate))
+(newline)
+(display '----------)
+
+((rand 'reset) 1100012975)
+(newline)
+(display (rand 'generate))
+(newline)
+(display (rand 'generate))
+(newline)
+(display (rand 'generate))
+(newline)
+(display '----------)
+
+((rand 'reset) random-init)
+(newline)
+(display (rand 'generate))
+(newline)
+(display (rand 'generate))
