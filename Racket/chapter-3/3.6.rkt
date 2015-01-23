@@ -1,0 +1,50 @@
+#lang racket
+(define (rand-update x)
+  (let ((a (quotient x 127773))
+        (b (remainder x 127773)))
+    (let ((r (- (* a 16807) (* b 2836))))
+      (if (< r 0) (+ r 2147483647) r))))
+
+(define random-init 7)
+
+(define rand
+  (let ((x random-init))
+    (define (dispatch m)
+      (cond ((eq? m 'generate)
+             (set! x (rand-update x)) x)
+            ((eq? m 'reset)
+             (lambda (seed)
+               (set! x seed) 'reset-done))
+            (else
+             (error "Unknown op -- RAND" m))))
+    dispatch))
+
+(newline)
+(display (rand 'generate))
+(newline)
+(display (rand 'generate))
+(newline)
+(display '----------)
+
+((rand 'reset) 1100012975)
+(display (rand 'generate))
+(newline)
+(display (rand 'generate))
+(newline)
+(display (rand 'generate))
+(newline)
+(display '----------)
+
+((rand 'reset) 1100012975)
+(display (rand 'generate))
+(newline)
+(display (rand 'generate))
+(newline)
+(display (rand 'generate))
+(newline)
+(display '----------)
+
+((rand 'reset) random-init)
+(display (rand 'generate))
+(newline)
+(display (rand 'generate))

@@ -1,0 +1,50 @@
+#lang racket
+(define (deriv exp var)
+  (cond ((number? exp) 0)
+        ((variable? exp)
+         (if (same-variable? exp var) 1 0))
+        ((sum? exp)
+         (make-sum (deriv (addend exp) var)
+                   (deriv (augend exp) var)))
+        ((product? exp)
+         (make-sum
+          (make-product (multiplier exp)
+                        (deriv (multiplicand exp) var))
+          (make-product (deriv (multiplier exp) var)
+                        (multiplicand exp))))                    
+        (else
+         (error "unknown expression type -- DERIV" exp))))
+
+(define (variable? exp) (symbol? exp))
+(define (same-variable? exp var)
+  (and (variable? exp) (variable? var) (eq? exp var)))
+(define (=number? exp num)
+  (and (number? exp) (number? num) (= exp num)))
+(define (=length? lat len)
+  (and (pair? lat) (= (length lat) len)))
+
+(define (sum? exp)    
+  (and (pair? exp) (eq? (cadr exp) '+)))
+(define (addend exp) (car exp))
+(define (augend exp) (caddr exp))
+
+(define (make-sum a1 a2)  
+  (cond ((=number? a1 0) a2)
+        ((=number? a2 0) a1)
+        ((and (number? a1) (number? a2)) (+ a1 a2))
+        (else (list a1 '+ a2))))
+
+(define (product? exp)
+  (and (pair? exp) (eq? (cadr exp) '*)))
+(define (multiplier exp) (car exp))
+(define (multiplicand exp) (caddr exp))
+
+(define (make-product p1 p2)  
+  (cond ((or (=number? p1 0) (=number? p2 0)) 0)
+        ((=number? p1 1) p2)
+        ((=number? p2 1) p1)
+        ((and (number? p1) (number? p2)) (* p1 p2))
+        (else (list p1 '* p2))))
+
+(deriv '(x + (3 * (x + (y + 2)))) 'x)
+(deriv '((x * y) * (x + 3)) 'x)
